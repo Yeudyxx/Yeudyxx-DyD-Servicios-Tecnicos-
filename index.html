@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DYD Servicios Técnicos | Portafolio de Proyectos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para los Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Colores corporativos extraídos del logo oficial */
+        .bg-custom-dark { background-color: #04142C; }
+        .bg-custom-blue { background-color: #0052FF; }
+        .text-custom-blue { color: #0052FF; }
+        .bg-custom-yellow { background-color: #FFD700; }
+        .text-custom-yellow { color: #FFD700; }
+        .border-custom-yellow { border-color: #FFD700; }
+
+        /* Estilos para las tarjetas de servicios clickeables */
+        .service-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .service-card.clicked {
+            transform: scale(0.98);
+        }
+
+        /* Estilos para el detalle del portafolio */
+        .portfolio-detail {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .portfolio-detail.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .back-button {
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        /* ========== BURBUJA WHATSAPP FIJA ========== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            background-color: #25D366;
+            color: white;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+            transition: 0.25s ease;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.12);
+            box-shadow: 0 10px 28px rgba(37, 211, 102, 0.6);
+            color: white;
+        }
+        /* Pequeño badge o texto opcional (tooltip) */
+        .whatsapp-float .tooltip {
+            position: absolute;
+            right: 74px;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .whatsapp-float:hover .tooltip {
+            opacity: 1;
+        }
+        /* responsive */
+        @media (max-width: 480px) {
+            .whatsapp-float {
+                width: 56px;
+                height: 56px;
+                font-size: 30px;
+                bottom: 16px;
+                right: 16px;
+            }
+            .whatsapp-float .tooltip {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 scroll-smooth">
+
+    <!-- ===== BURBUJA WHATSAPP FIJA (SIEMPRE VISIBLE) ===== -->
+    <a href="https://wa.me/50672827733" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="tooltip">¡Escríbenos!</span>
+    </a>
+
+    <!-- NAV BAR -->
+    <header class="bg-custom-dark text-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <!-- Logo Oficial -->
+            <div class="flex items-center">
+                <img src="img/LogoDyD.png" alt="Logo DYD Servicios Técnicos" class="h-12 md:h-16 w-auto object-contain">
+            </div>
+            <!-- Menú -->
+            <nav class="hidden md:flex space-x-6 font-medium text-sm">
+                <a href="#inicio" class="hover:text-custom-yellow transition">Inicio</a>
+                <a href="#nosotros" class="hover:text-custom-yellow transition">Nosotros</a>
+                <a href="#servicios" class="hover:text-custom-yellow transition">Servicios</a>
+                <a href="#proyectos" class="hover:text-custom-yellow transition">Proyectos</a>
+                <a href="#contacto" class="hover:text-custom-yellow transition">Contacto</a>
+            </nav>
+            <!-- Botón Cotización -->
+            <a href="#contacto" class="bg-custom-yellow text-custom-dark font-bold px-4 py-2 rounded text-sm hover:bg-yellow-400 transition shadow">
+                Solicitar cotización
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="inicio" class="relative bg-custom-dark text-white overflow-hidden min-h-[550px] flex items-center">
+        <!-- Fondo con opacidad -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-25" style="background-image: url(img/fondoSeñor.jpg);"></div>
+        
+        <div class="container mx-auto px-4 py-16 relative z-10 grid md:grid-cols-2 gap-8 items-center">
+            <div class="space-y-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+                    DYD <br><span class="text-custom-yellow">SERVICIOS TÉCNICOS</span>
+                </h1>
+                <p class="text-lg text-gray-200 font-medium">
+                    Soluciones integrales y seguras en mantenimiento eléctrico, climatización e infraestructura para los sectores industrial, residencial y comercial en todo Costa Rica.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#contacto" class="bg-custom-yellow text-custom-dark font-bold px-6 py-3 rounded text-sm hover:bg-yellow-400 transition shadow flex items-center gap-2">
+                        <i class="fas fa-file-invoice-dollar"></i> Solicitar cotización
+                    </a>
+                    <a href="https://wa.me/50672827733" target="_blank" class="bg-custom-blue text-white font-bold px-6 py-3 rounded text-sm hover:bg-blue-700 transition shadow flex items-center gap-2">
+                        <i class="fab fa-whatsapp text-lg"></i> WhatsApp 7282-7733
+                    </a>
+                </div>
+            </div>
+            <!-- Lado derecho -->
+            <div class="hidden md:block">
+                <img src="img/FotoPortada.jpg" alt="Técnico trabajando profesionalmente" class="rounded-lg shadow-2xl border-4 border-slate-800 object-cover h-[400px] w-full">
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE NOSOTROS, MISIÓN Y VISIÓN -->
+    <section id="nosotros" class="py-16 bg-white">
+        <div class="container mx-auto px-4 space-y-12">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-custom-blue uppercase tracking-wide border-b-2 border-custom-yellow pb-2">Quiénes Somos</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                        DYD Servicios Técnicos es una empresa costarricense especializada en la prestación de servicios de mantenimiento eléctrico, instalaciones eléctricas, montaje de subestaciones eléctricas, sistemas de aire acondicionado y mantenimiento general. Trabajamos con compromiso, responsabilidad y profesionalismo, enfocados en satisfacer las necesidades mediante soluciones confiables adaptadas a cada proyecto.
+                    </p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-custom-blue uppercase tracking-wide border-b-2 border-custom-yellow pb-2 flex items-center gap-2">
+                        <i class="fas fa-bullseye text-gray-400"></i> Misión
+                    </h3>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                        Brindar soluciones técnicas integrales mediante servicios especializados de mantenimiento e instalaciones eléctricas, sistemas de aire acondicionado y mantenimiento general, asegurando altos estándares de calidad, seguridad y satisfacción del cliente.
+                    </p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-custom-blue uppercase tracking-wide border-b-2 border-custom-yellow pb-2 flex items-center gap-2">
+                        <i class="fas fa-eye text-gray-400"></i> Visión
+                    </h3>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                        Consolidarnos como una empresa líder en servicios técnicos especializados a nivel nacional, reconocida por la calidad de nuestros trabajos, el compromiso con nuestros clientes y la excelencia de nuestro personal técnico capacitado.
+                    </p>
+                </div>
+            </div>
+
+            <!-- NUESTROS VALORES -->
+            <div class="pt-8 border-t border-gray-100">
+                <h4 class="text-center font-bold text-custom-dark text-lg mb-6 uppercase tracking-wider">Nuestros Valores Fundamentales</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-blue font-semibold text-sm text-gray-700">Responsabilidad</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-yellow font-semibold text-sm text-gray-700">Honestidad</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-blue font-semibold text-sm text-gray-700">Seguridad</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-yellow font-semibold text-sm text-gray-700">Calidad</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-blue font-semibold text-sm text-gray-700">Profesionalismo</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-yellow font-semibold text-sm text-gray-700">Compromiso</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-blue font-semibold text-sm text-gray-700">Trabajo en Equipo</div>
+                    <div class="p-3 bg-gray-50 rounded shadow-sm border-l-4 border-custom-yellow font-semibold text-sm text-gray-700">Mejora Continua</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPROMISO CON LA SEGURIDAD (Destacado) -->
+    <section class="bg-gray-100 py-10 border-t border-b border-gray-200">
+        <div class="container mx-auto px-4 max-w-3xl text-center space-y-3">
+            <h3 class="text-xl font-bold text-custom-dark uppercase tracking-wide flex items-center justify-center gap-2">
+                <i class="fas fa-hard-hat text-custom-blue"></i> Compromiso con la Seguridad
+            </h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                La seguridad es una prioridad en cada uno de nuestros proyectos. Aplicamos buenas prácticas de trabajo seguro y utilizamos equipo de protección personal adecuado para cada actividad, promoviendo ambientes de trabajo seguros para nuestros colaboradores y clientes.
+            </p>
+        </div>
+    </section>
+
+    <!-- NUESTROS SERVICIOS EXTENDIDOS -->
+    <section id="servicios" class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-custom-dark mb-2 tracking-wide">PORTAFOLIO DE <span class="text-custom-blue">SERVICIOS</span></h2>
+            <div class="w-16 h-1 bg-custom-yellow mx-auto mb-12"></div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+                <!-- 1. Mantenimiento Eléctrico -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="1">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Mantenimiento Eléctrico</h3>
+                        <p class="text-xs text-gray-500 mb-3">Mantenimiento preventivo y correctivo para optimizar instalaciones.</p>
+                        <ul class="text-xs text-gray-600 space-y-1 mb-4">
+                            <li>• Diagnóstico de fallas eléctricas.</li>
+                            <li>• Inspecciones técnicas.</li>
+                            <li>• Reparación de equipos eléctricos.</li>
+                            <li>• Mantenimiento de tableros eléctricos.</li>
+                            <li>• Verificación de conexiones.</li>
+                            <li>• Elaboración de informes técnicos.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded text-2xs text-custom-blue border-l-2 border-custom-blue">
+                        <strong class="block text-xs">Beneficios:</strong> Mayor vida útil, reducción de fallas y menor inactividad.
+                    </div>
+                </div>
+
+                <!-- 2. Instalaciones Eléctricas -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="2">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Instalaciones Eléctricas</h3>
+                        <p class="text-xs text-gray-500 mb-3">Sistemas eficientes diseñados bajo norma.</p>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• Instalaciones residenciales, comerciales e industriales.</li>
+                            <li>• Remodelaciones y ampliaciones eléctricas.</li>
+                            <li>• Canalizaciones y cableado estructural.</li>
+                            <li>• Sistemas de iluminación avanzada.</li>
+                            <li>• Sistemas de puesta a tierra.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3. Montaje de Subestaciones -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="3">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Montaje de Subestaciones</h3>
+                        <p class="text-xs text-gray-500 mb-3">Infraestructura de alta y media tensión.</p>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• Desarrollo integral de obra gris.</li>
+                            <li>• Instalación y configuración de transformadores.</li>
+                            <li>• Montaje electromecánico de precisión.</li>
+                            <li>• Implementación de sistemas de protección.</li>
+                            <li>• Pruebas técnicas y puesta en marcha.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Aire Acondicionado -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="4">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-snowflake"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Aire Acondicionado</h3>
+                        <p class="text-xs text-gray-500 mb-3">Confort térmico y eficiencia de climatización.</p>
+                        <ul class="text-xs text-gray-600 space-y-1 mb-4">
+                            <li>• Instalación y puesta en marcha de equipos.</li>
+                            <li>• Mantenimiento preventivo y correctivo.</li>
+                            <li>• Limpieza profunda y desinfección de unidades.</li>
+                            <li>• Diagnóstico, reparación de averías y recarga.</li>
+                            <li>• Revisión de sistemas eléctricos asociados.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded text-2xs text-amber-800 border-l-2 border-custom-yellow">
+                        <strong class="block text-xs">Beneficios:</strong> Mayor eficiencia energética y mejor calidad de aire.
+                    </div>
+                </div>
+
+                <!-- 5. Venta de Equipos Eléctricos -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="5">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Venta de Equipos Industriales</h3>
+                        <p class="text-xs text-gray-500 mb-3">Suministros de marcas líderes para proyectos.</p>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• Materiales eléctricos y componentes industriales.</li>
+                            <li>• Dispositivos avanzados de protección.</li>
+                            <li>• Transformadores y tableros eléctricos.</li>
+                            <li>• Asesoría técnica especializada para la correcta selección.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 6. Mantenimiento General -->
+                <div class="service-card border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition bg-gray-50 flex flex-col justify-between" data-service="6">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-custom-dark text-custom-yellow flex items-center justify-center text-xl mb-4 shadow">
+                            <i class="fas fa-brush"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-custom-dark mb-2">Mantenimiento General</h3>
+                        <p class="text-xs text-gray-500 mb-3">Cuidado y soporte de infraestructura.</p>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• Limpieza y mantenimiento de jardines/áreas verdes.</li>
+                            <li>• Armado e instalación de estructuras metálicas.</li>
+                            <li>• Pintura industrial y comercial especializada.</li>
+                            <li>• Soldadura calificada y servicios generales de soporte.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE PORTAFOLIO DETALLADO (Aparece al hacer clic en un servicio) -->
+    <section id="portfolio-detail" class="py-16 bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto px-4">
+            <!-- Botón para volver atrás -->
+            <button onclick="showAllServices()" class="back-button mb-8 inline-flex items-center gap-2 bg-custom-dark text-white px-4 py-2 rounded-lg hover:bg-custom-blue transition shadow-sm">
+                <i class="fas fa-arrow-left"></i> Volver a Servicios
+            </button>
+
+            <!-- Detalle del Servicio 1: Mantenimiento Eléctrico -->
+            <div id="detail-1" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-bolt text-custom-yellow mr-2"></i>Mantenimiento Eléctrico</h3>
+                        <p class="text-gray-300 mt-1">Servicios especializados de mantenimiento preventivo y correctivo</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Ofrecemos servicios completos de mantenimiento eléctrico para garantizar el funcionamiento óptimo y seguro de sus instalaciones. Nuestro equipo de técnicos especializados realiza diagnósticos precisos, reparaciones eficientes y mantenimiento preventivo para evitar fallas inesperadas.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Diagnóstico avanzado de fallas eléctricas</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Inspecciones técnicas detalladas</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Reparación de equipos eléctricos</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Mantenimiento de tableros eléctricos</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Verificación de conexiones</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Elaboración de informes técnicos</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoElectrico/Tablero.jpg" alt="Tablero eléctrico industrial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Mantenimiento de tablero industrial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoElectrico/3b327d89-2d21-41ee-8f0e-9a0a9a21a9d4.jpg" alt="Mantenimiento preventivo" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Mantenimiento preventivo</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoElectrico/TableroGrande.jpg" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Instalación eléctrica</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoElectrico/Caja.jpg" alt="Sistema eléctrico" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Sistema eléctrico</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del Servicio 2: Instalaciones Eléctricas -->
+            <div id="detail-2" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-plug text-custom-yellow mr-2"></i>Instalaciones Eléctricas</h3>
+                        <p class="text-gray-300 mt-1">Sistemas eficientes diseñados bajo norma</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Realizamos instalaciones eléctricas de alta calidad para todo tipo de espacios, desde residenciales hasta industriales. Nos aseguramos de que cada instalación cumpla con las normativas vigentes y garantice la seguridad y eficiencia energética.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Instalaciones residenciales, comerciales e industriales</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Remodelaciones y ampliaciones eléctricas</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Canalizaciones y cableado estructural</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Sistemas de iluminación avanzada</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Sistemas de puesta a tierra</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/InstalacionElectrica/CajaInstalacion.jpg" alt="Instalación residencial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Instalación residencial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/InstalacionElectrica/Grande.jpg" alt="Instalación comercial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Instalación comercial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/InstalacionElectrica/Instalando.jpg" alt="Iluminación" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Sistema de iluminación</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/InstalacionElectrica/SeñorInstanado.jpg" alt="Cableado" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Cableado estructural</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del Servicio 3: Montaje de Subestaciones -->
+            <div id="detail-3" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-industry text-custom-yellow mr-2"></i>Montaje de Subestaciones</h3>
+                        <p class="text-gray-300 mt-1">Infraestructura de alta y media tensión</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Especialistas en el montaje de subestaciones eléctricas de alta y media tensión. Realizamos el desarrollo integral de proyectos, desde la obra gris hasta la puesta en marcha, garantizando la máxima calidad y seguridad en cada etapa.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Desarrollo integral de obra gris</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Instalación y configuración de transformadores</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Montaje electromecánico de precisión</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Implementación de sistemas de protección</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Pruebas técnicas y puesta en marcha</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MontajedeSubestaciones/CajaGrande.jpg" alt="Subestación industrial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Subestación industrial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MontajedeSubestaciones/CajaManos.jpg" alt="Transformadores" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Instalación de transformadores</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MontajedeSubestaciones/Cilindros.jpg" alt="Obra gris" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Obra gris para subestación</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MontajedeSubestaciones/Montaje.jpg" alt="Pruebas técnicas" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Pruebas y puesta en marcha</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del Servicio 4: Aire Acondicionado -->
+            <div id="detail-4" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-snowflake text-custom-yellow mr-2"></i>Aire Acondicionado</h3>
+                        <p class="text-gray-300 mt-1">Confort térmico y eficiencia de climatización</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Ofrecemos servicios completos de climatización, desde la instalación de equipos hasta el mantenimiento preventivo y correctivo. Aseguramos el confort térmico y la eficiencia energética en cada proyecto.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Instalación y puesta en marcha de equipos</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Mantenimiento preventivo y correctivo</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Limpieza profunda y desinfección de unidades</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Diagnóstico, reparación de averías y recarga</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Revisión de sistemas eléctricos asociados</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=400" alt="Aire residencial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Instalación residencial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&q=80&w=400" alt="Aire comercial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Climatización comercial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400" alt="Mantenimiento aire" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Mantenimiento de equipos</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?auto=format&fit=crop&q=80&w=400" alt="Sistema climatización" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Sistema de climatización</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del Servicio 5: Venta de Equipos -->
+            <div id="detail-5" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-shopping-cart text-custom-yellow mr-2"></i>Venta de Equipos Industriales</h3>
+                        <p class="text-gray-300 mt-1">Suministros de marcas líderes para proyectos</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Suministramos equipos eléctricos y componentes industriales de las mejores marcas del mercado. Ofrecemos asesoría técnica especializada para la correcta selección de equipos según las necesidades específicas de cada proyecto.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Materiales eléctricos y componentes industriales</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Dispositivos avanzados de protección</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Transformadores y tableros eléctricos</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Asesoría técnica especializada</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&q=80&w=400" alt="Equipos industriales" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Suministro de equipos</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400" alt="Componentes eléctricos" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Componentes eléctricos</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=400" alt="Transformadores" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Transformadores</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?auto=format&fit=crop&q=80&w=400" alt="Tableros eléctricos" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Tableros eléctricos</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del Servicio 6: Mantenimiento General -->
+            <div id="detail-6" class="portfolio-detail">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-custom-dark text-white p-6">
+                        <h3 class="text-2xl font-bold"><i class="fas fa-brush text-custom-yellow mr-2"></i>Mantenimiento General</h3>
+                        <p class="text-gray-300 mt-1">Cuidado y soporte de infraestructura</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Descripción Detallada</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    Brindamos servicios de mantenimiento general para mantener sus instalaciones en óptimas condiciones. Desde limpieza de áreas hasta trabajos de estructura y pintura, nos aseguramos de que sus espacios estén siempre en las mejores condiciones.
+                                </p>
+                                <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Limpieza y mantenimiento de jardines/áreas verdes</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Armado e instalación de estructuras metálicas</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Pintura industrial y comercial especializada</li>
+                                    <li><i class="fas fa-check-circle text-custom-blue mr-2"></i> Soldadura calificada y servicios generales de soporte</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-custom-dark mb-4 border-b-2 border-custom-yellow pb-2">Proyectos Realizados</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoGeneral/Acobijado.jpg" alt="Mantenimiento jardines" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Mantenimiento de áreas verdes</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoGeneral/Caja.jpg" alt="Estructuras metálicas" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Estructuras metálicas</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoGeneral/DandoMantenimiento.jpg" alt="Pintura industrial" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Pintura industrial</div>
+                                    </div>
+                                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                                        <img src="img/PortafolioDeServicios/MantenimientoGeneral/Mantenimiento.jpg" alt="Soldadura" class="w-full h-32 object-cover">
+                                        <div class="p-2 text-xs text-gray-700 font-medium">Soldadura calificada</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUÉ ELEGIRNOS -->
+    <section class="bg-custom-dark text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-xl md:text-2xl font-bold text-custom-yellow mb-10 tracking-wider">¿POR QUÉ ELEGIRNOS?</h2>
+            <div class="grid grid-cols-2 md:grid-cols-7 gap-4">
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-user-tie text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Atención personalizada</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-star text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Compromiso con la calidad</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-check-shield text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Normas de seguridad</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-box-open text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Soluciones integrales</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-user-cog text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Personal capacitado</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2">
+                    <i class="fas fa-map-marked-alt text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Cobertura nacional</p>
+                </div>
+                <div class="flex flex-col items-center space-y-2 p-2 col-span-2 md:col-span-1">
+                    <i class="fas fa-smile text-2xl text-custom-yellow"></i>
+                    <p class="text-2xs font-semibold uppercase tracking-wider">Satisfacción enfocada</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROYECTOS REALIZADOS (Cuadrícula limpia de 4) -->
+    <section id="proyectos" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-custom-dark mb-2 tracking-wide">PROYECTOS <span class="text-custom-blue">REALIZADOS</span></h2>
+            <div class="w-16 h-1 bg-custom-yellow mx-auto mb-10"></div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                    <img src="img/ProyectosRealizados/TableroElectrico.jpg" class="w-full h-48 object-cover">
+                    <p class="py-3 px-2 text-sm font-semibold text-gray-700 bg-white">Instalación de tablero eléctrico</p>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                    <img src="img/ProyectosRealizados/mantenimientosElectrico.jpg" alt="Mantenimiento preventivo" class="w-full h-48 object-cover">
+                    <p class="py-3 px-2 text-sm font-semibold text-gray-700 bg-white">Mantenimiento eléctrico</p>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                    <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=400" alt="Aire acondicionado residencial" class="w-full h-48 object-cover">
+                    <p class="py-3 px-2 text-sm font-semibold text-gray-700 bg-white">Instalación de aire acondicionado</p>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                    <img src="img/ProyectosRealizados/Instalacion.jpg" alt="Montaje de subestación" class="w-full h-48 object-cover">
+                    <p class="py-3 px-2 text-sm font-semibold text-gray-700 bg-white">Montaje de subestación</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO & FORMULARIO -->
+    <section id="contacto" class="py-16 bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12">
+            <!-- Datos de contacto -->
+            <div class="space-y-6">
+                <h2 class="text-2xl font-bold text-custom-dark tracking-wide uppercase">Contáctenos</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <div class="text-custom-blue text-xl mt-1"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-700">Teléfono / WhatsApp</h4>
+                            <p class="text-sm text-custom-blue font-semibold">7282-7733</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-custom-blue text-xl mt-1"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-700">Correo Electrónico</h4>
+                            <p class="text-sm text-gray-600">contacto@dydserviciost.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-custom-blue text-xl mt-1"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-700">Cobertura</h4>
+                            <p class="text-sm text-gray-600">Todo el territorio nacional, Costa Rica</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <form class="space-y-4 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" placeholder="Nombre" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-custom-blue" required>
+                    <input type="text" placeholder="Teléfono" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-custom-blue" required>
+                </div>
+                <input type="email" placeholder="Correo electrónico" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-custom-blue" required>
+                <textarea placeholder="Detalle de su requerimiento o proyecto" rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-custom-blue" required></textarea>
+                <button type="submit" class="w-full bg-custom-yellow text-custom-dark font-bold py-2 rounded text-sm hover:bg-yellow-400 transition shadow flex items-center justify-center gap-2">
+                    Enviar mensaje <i class="fas fa-paper-plane text-xs"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-custom-dark text-white py-6 border-t border-slate-900">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-xs space-y-4 md:space-y-0 text-gray-400">
+            <div>
+                <img src="img/LogoDyD.png" alt="Logo DYD" class="h-10 w-auto object-contain brightness-95">
+            </div>
+            <div>&copy; 2026 DYD Servicios Técnicos. Todos los derechos reservados.</div>
+            <div class="flex space-x-4 text-base">
+                <a href="#" class="hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/50672827733" target="_blank" class="hover:text-white transition"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript para manejar los clics en los servicios -->
+    <script>
+        // Función para ocultar todas las secciones de detalle
+        function hideAllDetails() {
+            const details = document.querySelectorAll('.portfolio-detail');
+            details.forEach(detail => {
+                detail.classList.remove('active');
+            });
+        }
+
+        // Función para mostrar el detalle de un servicio específico
+        function showServiceDetail(serviceId) {
+            hideAllDetails();
+            const detailElement = document.getElementById(`detail-${serviceId}`);
+            if (detailElement) {
+                detailElement.classList.add('active');
+                // Scroll hacia la sección de detalle
+                document.getElementById('portfolio-detail').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Función para volver a mostrar todos los servicios
+        function showAllServices() {
+            hideAllDetails();
+            // Scroll hacia la sección de servicios
+            document.getElementById('servicios').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Agregar event listeners a todas las tarjetas de servicio
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const serviceId = this.dataset.service;
+                    if (serviceId) {
+                        showServiceDetail(serviceId);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
